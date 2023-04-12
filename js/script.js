@@ -138,3 +138,97 @@ $(document).ready(function () {
     });
   });
 });
+
+$(document).ready(function () {
+  const bannerWrap = $(".bannerWrap");
+  // const banner = $(".bannerWrap .banner");
+  const banner = bannerWrap.find(".banner");
+  // const bannerSlide = $(".bannerWrap .banner .banner-slide");
+  const bannerSlide = banner.find(".banner-slide");
+  // 배너의 너비
+  const bannerW = bannerWrap.width();
+  // 배너의 높이
+  const bannerH = bannerWrap.height();
+  // 배너의 배치
+  const bannerDir = "left"; // up, down, right, left
+  // 총 배너 개수
+  const bannerTotal = bannerSlide.length;
+  // 슬라이드 타이머 생성
+  let bannerId;
+  // 슬라이드 이동 속도(1000 은 1초)
+  let bannerSpeed = 1000;
+  // 슬라이드 인터벌 시간(1000 은 1초)
+  let bannerDelay = 2000;
+
+  // 배너의 실제 배치
+  switch (bannerDir) {
+    case "up":
+      $.each(bannerSlide, function (index, item) {
+        $(item).css({ left: 0, top: index * bannerH });
+      });
+      slideMoveUp();
+      break;
+    case "down":
+      $.each(bannerSlide, function (index, item) {
+        $(item).css({ left: 0, top: -index * bannerH });
+      });
+      slideMoveDown();
+      break;
+    case "left":
+      $.each(bannerSlide, function (index, item) {
+        $(item).css({ left: index * bannerW, top: 0 });
+      });
+      bannerId = setTimeout(slideMoveLeft, bannerDelay);
+      break;
+    case "right":
+      $.each(bannerSlide, function (index, item) {
+        $(item).css({ left: -index * bannerW, top: 0 });
+      });
+      slideMoveRight();
+      break;
+    default:
+      $.each(bannerSlide, function (index, item) {
+        $(item).css({ left: 0, top: 0, display: "none", zIndex: -100 });
+        if (index === 0) {
+          $(item).css({ zIndex: 99, display: "block" });
+        }
+      });
+      slideMove();
+      break;
+  }
+
+  function slideMoveUp() {
+    $.each(bannerSlide, function (index, item) {});
+  }
+  function slideMoveDown() {
+    $.each(bannerSlide, function (index, item) {});
+  }
+  function slideMoveLeft() {
+    $.each(bannerSlide, function (index, item) {
+      // 각각의 슬라이드 jQuery 대상으로 저장
+      let tempSlise = $(item);
+      // 왼쪽으로 도착해야 할 위치를 파악한다.
+      // 현재 left 위치값 - 300
+      let nowX = tempSlise.css("left");
+      // nowX 는 글자입니다.
+      let tgX = parseInt(nowX) - bannerW;
+      // 조건에 따라서
+      if (tgX < -bannerW) {
+        // 1. 슬라이드를 제일 가장 left 끝쪽으로 위치시킨다.
+        tempSlise.css("left", bannerW * (bannerTotal - 1));
+        // 2. 새롭게 이동할 값으로 계산
+        tgX = bannerW * (bannerTotal - 2);
+      }
+      tempSlise.animate({ left: tgX }, bannerSpeed, function () {
+        clearTimeout(bannerId);
+        bannerId = setTimeout(slideMoveLeft, bannerDelay);
+      });
+    });
+  }
+  function slideMoveRight() {
+    $.each(bannerSlide, function (index, item) {});
+  }
+  function slideMove() {
+    $.each(bannerSlide, function (index, item) {});
+  }
+});
